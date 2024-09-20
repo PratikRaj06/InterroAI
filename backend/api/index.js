@@ -1,8 +1,8 @@
 import express from "express"
 import cors from 'cors';
-import summarizeResume from './routes/summarizeResume.js'
-import analyseResume from './routes/analyseResume.js'
-import interviewData from './routes/interviewData.js'
+import summarizeResume from '../routes/summarizeResume.js'
+import analyseResume from '../routes/analyseResume.js'
+import interviewData from '../routes/interviewData.js'
 
 const app = express()
 app.use(cors())
