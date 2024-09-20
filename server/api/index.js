@@ -2,7 +2,7 @@ import express from 'express'
 import hello from '../routes/hello.js'
 import cors from 'cors'
 // import analyseResume from '../routes/analyseResume.js'
-import interviewData from './routes/interviewData.js'
+import interviewData from '../routes/interviewData.js'
 const app = express();
 
 app.use(cors())
