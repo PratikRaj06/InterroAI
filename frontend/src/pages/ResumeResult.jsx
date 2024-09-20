@@ -98,7 +98,7 @@ const ResumeResult = () => {
         let pageHeight = pdfHeight;
 
         while (position < imgHeight) {
-            pdf.addImage(imgData, 'PNG', 0, -position, imgWidth, imgHeight);
+            pdf.addImage(imgData, 'png', 0, -position, imgWidth, imgHeight);
             position += pageHeight;
 
             if (position < imgHeight) {

@@ -1,5 +1,5 @@
 import React from 'react'
-import logoName from '../assets/images/logoName.svg'
+import logoName from '../assets/images/logoName.webp'
 const Header = () => {
     return (
         <div className='w-full py-1 lg:px-10 px-5 bg-gradient-to-r from-blue-medium to-pink flex items-center justify-between'>

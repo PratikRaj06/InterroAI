@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom'
 import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { AuthContext } from '../contexts/auth';
-import logoName from '../assets/images/logoName.svg'
+import logoName from '../assets/images/logoName.webp'
 import { PortraitContext } from '../contexts/portrait';
 
 const Meter = ({ value, colour, fontSize, size }) => {

@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { auth } from '../firebase.jsx';
 import { createUserWithEmailAndPassword, sendEmailVerification, signInWithPopup, GoogleAuthProvider, updateProfile } from 'firebase/auth';
-import logoName from '../assets/images/logoName.svg'
-import register from '../assets/images/register.svg';
-import google from '../assets/images/google.png';
-import emailverification from '../assets/images/emailverification.svg';
+import logoName from '../assets/images/logoName.webp'
+import register from '../assets/images/register.webp';
+import google from '../assets/images/google.webp';
+import emailverification from '../assets/images/emailverification.webp';
 import { Link, useNavigate } from 'react-router-dom';
 import { PortraitContext } from '../contexts/portrait.jsx';
 

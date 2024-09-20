@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import * as faceapi from 'face-api.js';
 import Header from '../components/Header';
-import cameraBox from '../assets/images/camera-box.png';
+import cameraBox from '../assets/images/camera-box.webp';
 import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';

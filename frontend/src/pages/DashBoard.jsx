@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
-import logoName from '../assets/images/logoName.svg'
-import interview from '../assets/images/interview.svg'
-import resume from '../assets/images/resume.svg'
+import logoName from '../assets/images/logoName.webp'
+import interview from '../assets/images/interview.webp'
+import resume from '../assets/images/resume.webp'
 import PersonIcon from '@mui/icons-material/Person';
 import { Link, useNavigate } from 'react-router-dom'
 import Tooltip from '@mui/material/Tooltip';

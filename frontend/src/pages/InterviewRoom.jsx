@@ -10,7 +10,7 @@ import { InterviewDataContext } from '../contexts/interview.jsx'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { PortraitContext } from '../contexts/portrait';
 import { AuthContext } from '../contexts/auth.jsx'
-import logoName from '../assets/images/logoName.svg'
+import logoName from '../assets/images/logoName.webp'
 
 const InterviewRoom = () => {
 

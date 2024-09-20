@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react'
-import logoName from '../assets/images/logoName.svg'
-import login from '../assets/images/login.svg'
-import google from '../assets/images/google.png'
-import emailverification from '../assets/images/emailverification.svg';
-import resetpassword from '../assets/images/resetpassword.svg';
-import visible from '../assets/images/visible.png'
-import notvisible from '../assets/images/not-visible.png'
-import close from '../assets/images/close.png'
+import logoName from '../assets/images/logoName.webp'
+import login from '../assets/images/login.webp'
+import google from '../assets/images/google.webp'
+import emailverification from '../assets/images/emailverification.webp';
+import resetpassword from '../assets/images/resetpassword.webp';
+import visible from '../assets/images/visible.webp'
+import notvisible from '../assets/images/not-visible.webp'
+import close from '../assets/images/close.webp'
 import { PortraitContext } from '../contexts/portrait.jsx';
 import { Link, useNavigate } from 'react-router-dom'
 import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail } from 'firebase/auth';

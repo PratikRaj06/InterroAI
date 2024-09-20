@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import logoName from '../assets/images/logoName.svg'
+import logoName from '../assets/images/logoName.webp'
 import { AuthContext } from '../contexts/auth'
 import { signOut } from 'firebase/auth';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Tooltip from '@mui/material/Tooltip';
 import { PortraitContext } from '../contexts/portrait';
-import user from '../assets/images/user.png'
+import user from '../assets/images/user.webp'
 import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
