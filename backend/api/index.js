@@ -11,10 +11,10 @@ app.use(express.json())
 app.use('/resume-details', summarizeResume)
 app.use('/resume-content', analyseResume)
 app.use('/interview-data', interviewData)
-app.get('/test', (req, res) => {
-    res.status(200).send("Hello World")
+app.get('/', (req, res) => {
+    res.status(200).send("Welcome to Interro AI")
 })
 
-app.listen(3000, () => console.log("Server ready on port 3000."));
-
-export default app;
+export default (req, res) => {
+    return app(req, res);
+};
