@@ -15,10 +15,7 @@ app.use('/interview-data', interviewData)
 app.get('/', (req, res) => {
     res.status(200).send("Welcome to Interro AI");
 });
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, ()=> {
-//     console.log(`Server is running on ${PORT}`)
-// })
+
 export default (req, res) => {
     return app(req, res);
 };
