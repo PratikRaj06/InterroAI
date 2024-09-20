@@ -1,6 +1,6 @@
 import express from 'express'
 import admin from 'firebase-admin';
-import { auth, db } from '../../firebaseAdmin.js'
+import { auth, db } from '../firebaseAdmin.js'
 const router = express.Router()
 
 
