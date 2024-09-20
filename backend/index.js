@@ -12,8 +12,8 @@ app.get
 app.use('/resume-details', summarizeResume)
 app.use('/resume-content', analyseResume)
 app.use('/interview-data', interviewData)
-app.get('/test', (req, res) => {
-    res.status(200).send("Hello World");
+app.get('/', (req, res) => {
+    res.status(200).send("Welcome to Interro AI");
 });
 // const PORT = process.env.PORT || 5000;
 // app.listen(PORT, ()=> {
