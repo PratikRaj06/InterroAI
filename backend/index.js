@@ -15,7 +15,10 @@ app.use('/interview-data', interviewData)
 app.get('/test', (req, res) => {
     res.status(200).send("Hello World");
 });
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, ()=> {
-    console.log(`Server is running on ${PORT}`)
-})
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, ()=> {
+//     console.log(`Server is running on ${PORT}`)
+// })
+export default (req, res) => {
+    return app(req, res);
+};
