@@ -10,7 +10,6 @@ import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 
-
 const Meter = ({ value, colour, fontSize, size }) => {
   return (
     <Gauge
@@ -50,7 +49,7 @@ const Profile = () => {
       if (response.status == 404) return
       if (response.status !== 200) {
         const errorData = await response.json();
-        window.alert(errorData.message);
+        alert(errorData.message);
         return;
       }
 
@@ -59,7 +58,7 @@ const Profile = () => {
       setUserData(responseData.data);
       setFetching(false);
     } catch (error) {
-      window.alert(`Error: ${error.message}`);
+      alert(`Error: ${error.message}`);
     }
   };
 
@@ -72,7 +71,7 @@ const Profile = () => {
       await signOut(auth);
       navigate('/sign-in');
     } catch (error) {
-      window.alert(`An error occurred while signing out ${error}`);
+      alert(`An error occurred while signing out ${error}`);
     }
   };
 
@@ -109,7 +108,7 @@ const Profile = () => {
     <>
     <div className={`${popup && 'opacity-25'} w-screen min-h-screen flex flex-col items-center`}>
       <div className='w-full py-1 lg:px-10 px-5 bg-gradient-to-r from-blue-medium to-pink flex items-center justify-between'>
-        <img onClick={() => window.location.href = '/home'} draggable={false} src={logoName} className='lg:h-6 h-4 my-2 cursor-pointer' alt="" />
+        <img onClick={() => navigate('/home')} draggable={false} src={logoName} className='lg:h-6 h-4 my-2 cursor-pointer' alt="" />
         <Tooltip onClick={() => setPopup(true)} className='text-white cursor-pointer' title="Sign Out">
           <LogoutIcon fontSize={isPortrait ? 'medium' : 'large'} />
         </Tooltip>
