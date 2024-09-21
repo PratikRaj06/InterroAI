@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import Tooltip from '@mui/material/Tooltip';
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { AuthContext } from '../contexts/auth';
@@ -28,7 +28,7 @@ const Meter = ({ value, colour, fontSize, size }) => {
 }
 
 const InterviewHistory = () => {
-
+    const navigate = useNavigate()
     const { isPortrait } = useContext(PortraitContext)
     const { accessToken, loading } = useContext(AuthContext)
     const [result, setResult] = useState(null)
@@ -51,13 +51,13 @@ const InterviewHistory = () => {
             });
 
             if (response.status !== 200) {
-                window.alert("An error");
+                alert("An error");
                 return;
             }
             const responseData = await response.json();
             setResult(responseData.data);
         } catch (error) {
-            window.alert(`Error: ${error.message}`);
+            alert(`Error: ${error.message}`);
         }
     };
 
@@ -76,7 +76,7 @@ const InterviewHistory = () => {
                 <ArrowBackIosIcon/>
             </Tooltip>
             </Link>
-                <img onClick={() => window.location.href = '/home'} draggable={false} src={logoName} className='lg:h-6 h-4 my-2 cursor-pointer' alt="" />
+                <img onClick={() => navigate('/home')} draggable={false} src={logoName} className='lg:h-6 h-4 my-2 cursor-pointer' alt="" />
                 
             </div>
             
