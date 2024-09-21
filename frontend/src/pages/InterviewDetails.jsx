@@ -4,6 +4,10 @@ import Header from '../components/Header'
 import { InterviewDataContext } from '../contexts/interview'
 import { AuthContext } from '../contexts/auth'
 import { PortraitContext } from '../contexts/portrait.jsx';
+import { storage } from '../firebase';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
+
+
 const InterviewDetails = () => {
 
     const { isPortrait } = useContext(PortraitContext)
@@ -36,18 +40,22 @@ const InterviewDetails = () => {
         setProcessing(true);
 
         try {
+            const fileRef = ref(storage, `uploads/${file.name}`);
+            await uploadBytes(fileRef, file);
             const formData = new FormData();
+            const fileUrl = await getDownloadURL(fileRef);
             formData.append('file', file);
             
             const response = await fetch(`${API_URL}/resume-details/summarize`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${accessToken}`
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
                 },
-                body: formData,
+                body: JSON.stringify({ fileUrl })
             });
+            const result = await response.json()
 
-            const result = await response.json();
 
             if (response.status === 500) {
                 setError(result.message);
