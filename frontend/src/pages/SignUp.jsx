@@ -18,7 +18,7 @@ const SignUp = () => {
     const [emailError, setEmailError] = useState("");
     const [nameError, setNameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
-    const [processing , setProcessing] = useState()
+    const [processing, setProcessing] = useState()
 
     const navigate = useNavigate();
 
@@ -83,7 +83,7 @@ const SignUp = () => {
     return (
         <>
 
-            
+
             <div className={`${mailSent && "backdrop-blur-md opacity-20"} w-full h-full bg-white text-blue-dark`} style={{ height: "100vh" }}>
                 <div className='w-full py-3 lg:px-10 px-5 bg-gradient-to-r from-purple to-pink flex items-center justify-between'>
                     <img draggable={false} src={logoName} className='lg:h-6 h-4' alt="" />
@@ -166,17 +166,16 @@ const SignUp = () => {
             </div>
 
             {mailSent &&
-                <div className='w-screen h-screen fixed inset-0 flex items-center justify-center'>
-                    <div style={{ animation: "softLoad 0.3s ease" }} className='relative w-1/3 rounded-lg bg-[#fae8ff] p-10 text-blue-dark font-semibold tracking-wide flex flex-col items-center justify-center gap-3 border-[2px] border-pink border-opacity-25 '>
-                        <h1 className='text-pink text-3xl font-bold'>Email Verification</h1>
-                        <img src={emailverification} className='w-2/3 py-5' alt="Email Verification" />
-                        <p className='text-center'>A verification link has been sent to your email.</p>
-                        <p className='text-center'>Click the link in the email to verify your account.</p>
-                        <button onClick={() => setMailSent(false)} className='w-3/4 m-5 bg-pink text-white py-2 px-10 rounded-lg'>Understood</button>
-                    </div>
-                </div>}
+                <div style={{ animation: "softLoad 0.3s ease" }} className={`${isPortrait ? 'md:w-8/12 w-10/12' : 'xl:w-1/3 w-1/2'} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg bg-[#fae8ff] p-10 text-blue-dark font-semibold tracking-wide flex flex-col items-center justify-center gap-3 border-[2px] border-pink border-opacity-25 `}>
+                    <h1 className='text-pink text-3xl font-bold text-center'>Email Verification</h1>
+                    <img src={emailverification} className='w-2/3 py-5' alt="Email Verification" />
+                    <p className='text-center'>A verification link has been sent to your email.</p>
+                    <p className='text-center'>Click the link in the email to verify your account.</p>
+                    <button onClick={() => setMailSent(false)} className='w-3/4 m-5 bg-pink text-white py-2 px-10 rounded-lg'>Understood</button>
+                </div>
+            }
 
-                {processing && <div className='max-w-max p-10 flex flex-col items-center gap-5 bg-white rounded-lg border-[2px] border-pink border-opacity-25  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
+            {processing && <div className='max-w-max p-10 flex flex-col items-center gap-5 bg-white rounded-lg border-[2px] border-pink border-opacity-25  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
                 <div className='h-20 w-20 border-8  rounded-full border-pink-light border-t-pink animate-spin'></div>
             </div>}
         </>
