@@ -27,7 +27,7 @@ const SignIn = () => {
   const [resetPassword, setResetPassword] = useState(false)
   const [resetEmail, setResetEmail] = useState("");
   const [resetEmailError, setResetEmailError] = useState("");
-  const [resetMessage, setResetMessage] = useState("A password reset link will sent to your email.")
+  const [resetMessage, setResetMessage] = useState("A password reset link will be sent to your registered email.")
   const [processing, setProcessing] = useState()
 
 
@@ -82,7 +82,7 @@ const SignIn = () => {
     else {
       try {
         await sendPasswordResetEmail(auth, resetEmail)
-        setResetMessage("Email sent, check your inbox")
+        setResetMessage("Email sent, please check your inbox")
       } catch (error) {
         window.alert(`An error occured! ${error}`)
       }
@@ -154,25 +154,23 @@ const SignIn = () => {
       </div>
 
       {mailSent &&
-        <div className='w-screen h-screen fixed inset-0 flex items-center justify-center'>
-          <div style={{ animation: "softLoad 0.3s ease" }} className='relative w-1/3 rounded-lg bg-[#fae8ff] p-10 text-blue-dark font-semibold tracking-wide flex flex-col items-center justify-center gap-3 border-[2px] border-pink border-opacity-25 '>
-            <h1 className='text-pink text-3xl font-bold'>Email Verification</h1>
-            <img src={emailverification} className='w-2/3 py-5' alt="Email Verification" />
-            <p className='text-center'>Your email is not verified yet.</p>
-            <p className='text-center'>A verification link has been sent to your email.</p>
-            <p className='text-center'>Click the link in the email to verify your account.</p>
-            <button onClick={() => setMailSent(false)} className='w-3/4 m-5 bg-pink text-white py-2 px-10 rounded-lg'>Understood</button>
-          </div>
-        </div>}
+                <div style={{ animation: "softLoad 0.3s ease" }} className={`${isPortrait ? 'md:w-8/12 w-10/12' : 'xl:w-1/3 w-1/2'} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg bg-[#fae8ff] p-10 text-blue-dark font-semibold tracking-wide flex flex-col items-center justify-center gap-3 border-[2px] border-pink border-opacity-25 `}>
+                    <h1 className='text-pink text-3xl font-bold text-center'>Email Verification</h1>
+                    <img src={emailverification} className='w-2/3 py-5' alt="Email Verification" />
+                    <p className='text-center'>You email is not verified yet.</p>
+                    <p className='text-center'>A verification link has been sent to your email.</p>
+                    <p className='text-center'>Click the link in the email to verify your account.</p>
+                    <button onClick={() => setMailSent(false)} className='w-3/4 m-5 bg-pink text-white py-2 px-10 rounded-lg'>Understood</button>
+                </div>
+            }
 
       {resetPassword &&
-        <div className='w-screen h-screen fixed inset-0 flex items-center justify-center'>
-          <div style={{ animation: "softLoad 0.3s ease" }} className='relative w-1/3 rounded-lg bg-[#fae8ff] p-10 text-blue-dark font-semibold tracking-wide flex flex-col items-center justify-center gap-3 border-[2px] border-pink border-opacity-25 '>
-            <h1 className='text-pink text-3xl font-bold'>Reset Password</h1>
+          <div style={{ animation: "softLoad 0.3s ease" }} className={`${isPortrait ? 'md:w-8/12 w-10/12' : 'xl:w-1/3 w-1/2'} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg bg-[#fae8ff] lg:p-10 p-5 text-blue-dark font-semibold tracking-wide flex flex-col items-center justify-center gap-3 border-[2px] border-pink border-opacity-25 `}>
+            <h1 className='text-pink text-3xl font-bold text-center'>Reset Password</h1>
             <button onClick={() => { setResetPassword(false); setResetMessage("A password reset link will sent to your email.") }} className='w-11/12 flex items-center justify-end absolute top-5'><img src={close} className='h-5 opacity-50' alt="" /></button>
             <img src={resetpassword} className='w-2/3 py-5' alt="Email Verification" />
-            <p className='text-center p-2 bg-purple bg-opacity-20 rounded-lg'>{resetMessage}</p>
-            <label className='w-11/12' htmlFor="">
+            <p className='lg:w-11/12 md:w-11/12 w-full text-center p-2 bg-purple bg-opacity-20 rounded-lg'>{resetMessage}</p>
+            <label className='lg:w-11/12 md:w-11/12 w-full' htmlFor="">
               <p className='p-2 text-md font-bold'>Registered Email</p>
               <input
                 onChange={(event) => { setResetEmail(event.target.value) }}
@@ -181,9 +179,9 @@ const SignIn = () => {
               />
             </label>
             {resetEmailError && <p className='w-11/12 text-red'>{resetEmailError}</p>}
-            <button onClick={handleResetpassword} className='w-11/12 m-5 bg-pink text-white py-2 px-10 rounded-lg'>Send Email</button>
+            <button onClick={handleResetpassword} className='lg:w-11/12 md:w-11/12 w-full m-5 bg-pink text-white py-2 px-10 rounded-lg'>Send Email</button>
           </div>
-        </div>}
+}
 
       {processing && <div className='max-w-max p-10 flex flex-col items-center gap-5 bg-white rounded-lg border-[2px] border-pink border-opacity-25  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
         <div className='h-20 w-20 border-8  rounded-full border-pink-light border-t-pink animate-spin'></div>
