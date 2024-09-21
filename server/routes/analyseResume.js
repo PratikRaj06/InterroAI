@@ -1,54 +1,57 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import multer from 'multer';
-import fs from 'fs';
-import admin from 'firebase-admin'
-import { GoogleAIFileManager } from '@google/generative-ai/server';
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import admin from 'firebase-admin';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import axios from 'axios';
 
 dotenv.config();
 
 const router = express.Router();
-
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
-const fileManager = new GoogleAIFileManager(process.env.GEMINI_KEY);
 
 const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash",
+    model: 'gemini-1.5-flash',
 });
 
-const upload = multer({ dest: 'pdfs/' });
-
-router.post('/analyse', upload.single('file'), async (req, res) => {
+router.post('/analyse', async (req, res) => {
     try {
         const idToken = req.headers.authorization?.split(' ')[1];
-        const file = req.file;
-        const jobDescription = req.body.jobDescription;
+        const { jobDescription, filename, fileUrl } = req.body;
+
+        console.log('Received request:', { jobDescription, fileUrl });
+
         if (!idToken) {
-            return res.status(401).json({ message: "No token provided." });
+            console.error('No token provided.');
+            return res.status(401).json({ message: 'No token provided.' });
         }
-        if (!file) {
-            return res.status(500).json({ message: "File Not Found" });
+        if (!fileUrl) {
+            console.error('File URL not found.');
+            return res.status(400).json({ message: 'File Not Found' });
         }
 
         const decodedToken = await admin.auth().verifyIdToken(idToken);
-
         if (!decodedToken) {
-            return res.status(401).json({ message: "No token provided." });
+            console.error('Invalid token.');
+            return res.status(401).json({ message: 'Invalid token.' });
         }
 
-        const uploadResponse = await fileManager.uploadFile(`pdfs/${file.filename}`, {
-            mimeType: 'application/pdf',
-            displayName: file.originalname,
-        });
+        // Step 1: Fetch the file data from the URI
+        const fileResponse = await axios.get(fileUrl, { responseType: 'arraybuffer' });
+        const fileBuffer = Buffer.from(fileResponse.data);
+        console.log('File data fetched successfully.');
 
-        const result = await model.generateContent([
-            {
-                fileData: {
-                    mimeType: uploadResponse.file.mimeType,
-                    fileUri: uploadResponse.file.uri,
-                }
+        // Step 2:  Convert file buffer to a GoogleGenerativeAI.Part object
+
+        const filePart = {
+            inlineData: {
+                data: fileBuffer.toString("base64"), // Convert buffer to Base64
+                mimeType: 'application/pdf',
             },
+        };
+
+        // Step 3: Generate content from the uploaded file using Gemini
+        const result = await model.generateContent([
+            filePart,
             {
                 text: `Please evaluate the resume on a scale of 1 to 10, where 10 indicates an exceptional fit for a job description that is ${jobDescription}. Your evaluation should be in simple, human-friendly language and structured in the following JSON format:
             {
@@ -78,12 +81,8 @@ router.post('/analyse', upload.single('file'), async (req, res) => {
                 "Suggestions": [Actionable suggestions for improving the resume, provided as complete sentences.]
             }
             `}
-
         ]);
-
-        fs.unlink(file.path, (error) => {
-            if (error) return res.status(500).json({ "message": `An error occurred in deleting: ${error}` });
-        });
+        console.log('Content generated successfully.');
 
         const cleanedData = (data) => {
             return data
@@ -98,7 +97,8 @@ router.post('/analyse', upload.single('file'), async (req, res) => {
         }
         res.status(200).json({ "resumeResult": resumeData });
     } catch (error) {
-        res.status(500).json({ "message": `An error occurred ${error}` });
+        console.error('Error occurred:', error);
+        res.status(500).json({ message: `An error occurred: ${error.message}` });
     }
 });
 
