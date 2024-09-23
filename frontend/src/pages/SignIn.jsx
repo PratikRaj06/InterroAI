@@ -126,7 +126,7 @@ const SignIn = () => {
                     className='w-10/12 bg-[#fdf4ff] p-2 focus:outline-none rounded-lg '
                     type={passwordVisible ? "text" : "password"}
                   />
-                  <img src={passwordVisible ? notvisible : visible} className='m-2 h-5 hover:cursor-pointer' onClick={() => { setPasswordVisible(!passwordVisible) }} alt="" />
+                  <img src={passwordVisible ? visible : notvisible} className='m-2 h-5 hover:cursor-pointer' onClick={() => { setPasswordVisible(!passwordVisible) }} alt="" />
                 </div>
               </label>
               {passwordError && <p className='w-11/12 text-red'>{passwordError}</p>}
