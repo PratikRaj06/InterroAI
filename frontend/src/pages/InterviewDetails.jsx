@@ -16,7 +16,9 @@ const InterviewDetails = () => {
     const [company, setCompany] = useState("not provided")
     const [jobRole, setJobRole] = useState("not provided")
     const [experience, setExperience] = useState("")
-    const [jobDescription, setJobDescription] = useState("not provided, assume this from job role")
+    const [jobDescription, setJobDescription] = useState("")
+    const [resume, setResume] = useState("Resume details not given, please focus on job role, job description and skills.")
+    const [selectedType, setselectedType] = useState('');
     const [file, setFile] = useState(null)
     const [error, setError] = useState("")
     const [processing, setProcessing] = useState(false)
@@ -33,47 +35,48 @@ const InterviewDetails = () => {
 
     const handleResumeProcessing = async () => {
         setError('');
-        if (!jobRole || !experience || !file) {
-            return setError("Fill all required details");
+        if (!jobRole || !experience || !jobDescription || !selectedType) {
+            return setError("Fill all the required details");
         }
 
         setProcessing(true);
 
-        try {
-            const fileRef = ref(storage, `uploads/${file.name}`);
-            await uploadBytes(fileRef, file);
-            const formData = new FormData();
-            const fileUrl = await getDownloadURL(fileRef);
-            formData.append('file', file);
-            
-            const response = await fetch(`${API_URL}/resume-details/summarize`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ fileUrl })
-            });
-            const result = await response.json()
+        if (file) {
+            try {
+                const fileRef = ref(storage, `uploads/${file.name}`);
+                await uploadBytes(fileRef, file);
+                const fileUrl = await getDownloadURL(fileRef);
 
-
-            if (response.status === 500) {
-                setError(result.message);
-                setProcessing(false);
-            } else {
-                setInterviewData({
-                    company,
-                    jobRole,
-                    experience,
-                    jobDescription,
-                    resume: result.resumeContent,
+                const response = await fetch(`${API_URL}/resume-details/summarize`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ fileUrl })
                 });
+                const result = await response.json()
+
+                await deleteObject(fileRef);
+
+                if (response.status === 500) {
+                    setError(result.message);
+                    setProcessing(false);
+                } else setResume(result.resumeContent)
+            } catch (error) {
                 setProcessing(false);
+                setError(error.message);
             }
-        } catch (error) {
-            setProcessing(false);
-            setError(error.message);
         }
+        setInterviewData({
+            company,
+            jobRole,
+            experience,
+            jobDescription,
+            resume,
+            selectedType
+        });
+        setProcessing(false);
     };
 
     return (
@@ -81,8 +84,8 @@ const InterviewDetails = () => {
             <div className='min-h-screen w-screen flex flex-col items-center'>
                 <Header />
                 <div className='w-full flex justify-center lg:p-10 p-5'>
-                    <div className={`${isPortrait? 'md:w-10/12 w-11/12': 'lg:w-1/2 w-8/12'} bg-pink-light lg:p-5 md:p-3 p-1 rounded-lg shadow-lg flex flex-col items-center gap-3`}>
-                        <h1 className='lg:text-4xl text-3xl  font-bold text-purple text-center my-5'>Interview Registration</h1>
+                    <div className={`${isPortrait ? 'md:w-10/12 w-11/12' : 'lg:w-1/2 w-8/12'} bg-pink-light lg:p-5 md:p-3 p-1 rounded-lg shadow-lg flex flex-col items-center gap-3`}>
+                        <h1 className='lg:text-4xl text-3xl  font-bold text-purple text-center my-5'>Interview Details</h1>
                         <label htmlFor="" className='w-11/12 flex flex-col items-start'>
                             <p className='text-md font-semibold text-blue-dark p-2'>Company</p>
                             <input onChange={(event) => {
@@ -92,32 +95,54 @@ const InterviewDetails = () => {
                         </label>
 
                         <label htmlFor="" className='w-11/12 flex flex-col items-start'>
-                            <p className='text-md font-semibold text-blue-dark p-2'>Job Role<span className='text-red'>*</span></p>
+                            <p className='text-md font-semibold text-blue-dark p-2'>Job Role <span className='text-red'>*</span></p>
                             <input onChange={(event) => {
                                 setJobRole(event.target.value)
                                 setError('')
-                            }} type="text" className='bg-[#fdf4ff] w-full py-2 px-3 rounded-lg focus:outline-none border-2 border-pink  border-opacity-25' placeholder='SDE' />
+                            }} type="text" className='bg-[#fdf4ff] w-full py-2 px-3 rounded-lg focus:outline-none border-2 border-pink  border-opacity-25' placeholder='Java Developer' />
                         </label>
 
                         <label htmlFor="" className='w-11/12 flex flex-col items-start'>
-                            <p className='text-md font-semibold text-blue-dark p-2'>Experience<span className='text-red'>*</span></p>
+                            <p className='text-md font-semibold text-blue-dark p-2'>Experience <span className='text-red'>*</span></p>
                             <input onChange={(event) => {
                                 setExperience(event.target.value)
                                 setError('')
-                            }} type="text" className='bg-[#fdf4ff] w-full py-2 px-3 rounded-lg focus:outline-none border-2 border-pink  border-opacity-25' placeholder='2 years' />
+                            }} type="text" className='bg-[#fdf4ff] w-full py-2 px-3 rounded-lg focus:outline-none border-2 border-pink  border-opacity-25' placeholder='1 year' />
                         </label>
 
                         <label htmlFor="" className='w-11/12 flex flex-col items-start'>
-                            <p className='text-md font-semibold text-blue-dark p-2'>Job Description / Skills</p>
+                            <p className='text-md font-semibold text-blue-dark p-2'>Job Description / Skills <span className='text-red'>*</span></p>
                             <textarea onChange={(event) => {
                                 setJobDescription(event.target.value)
                                 setError('')
-                            }} rows={4} className='bg-[#fdf4ff] w-full py-2 px-3 rounded-lg focus:outline-none border-2 border-pink border-opacity-25 resize-none' placeholder='Paste your jb description here or mention some relevant skills (optional)'></textarea>
+                            }} rows={4} className='bg-[#fdf4ff] w-full py-2 px-3 rounded-lg focus:outline-none border-2 border-pink border-opacity-25 resize-none' placeholder='Paste your job description or mention some relevant skills'></textarea>
                         </label>
 
                         <label htmlFor="" className='w-11/12 flex flex-col items-start'>
-                            <p className='text-md font-semibold text-blue-dark p-2'>Resume<span className='text-red'>*</span></p>
-                            <div className={`bg-[#fdf4ff] w-full py-2 px-3 rounded-lg border-2 border-pink border-opacity-25 flex ${isPortrait? 'md:flex-row flex-col': 'flex-row'} items-center justify-between`}>
+                            <p className='text-md font-semibold text-blue-dark p-2'>Interview Type <span className='text-red'>*</span></p>
+
+                            <div className='w-full flex items-center justify-between gap-5'>
+                                <button
+                                    className={`w-1/2 border-2 rounded-lg py-1 px-5 font-medium ${selectedType === 'technical' ? 'bg-purple text-white' : 'text-purple bg-[#fdf4ff]'
+                                    } border-2 border-purple`}
+                                    onClick={() => setselectedType('technical')}
+                                >
+                                    Technical
+                                </button>
+                                <button
+                                    className={`w-1/2 border-2 rounded-lg py-1 px-5 font-medium ${selectedType === 'hr' ? 'bg-purple text-white' : 'text-purple bg-[#fdf4ff]'
+                                    } border-2 border-purple`}
+                                    onClick={() => setselectedType('hr')}
+                                >
+                                    HR
+                                </button>
+                            </div>
+
+                        </label>
+
+                        <label htmlFor="" className='w-11/12 flex flex-col items-start'>
+                            <p className='text-md font-semibold text-blue-dark p-2'>Resume</p>
+                            <div className={`bg-[#fdf4ff] w-full py-2 px-3 rounded-lg border-2 border-pink border-opacity-25 flex ${isPortrait ? 'md:flex-row flex-col' : 'flex-row'} items-center justify-between`}>
                                 <p className='p-1'>{file ? file.name : 'No file chosen'}</p>
                                 <input ref={filePickerRef} type="file" accept='application/pdf' onChange={(event) => {
                                     setFile(event.target.files[0])
