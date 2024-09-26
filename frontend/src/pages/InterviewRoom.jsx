@@ -16,8 +16,7 @@ const InterviewRoom = () => {
 
   const { interviewData } = useContext(InterviewDataContext);
   const { accessToken } = useContext(AuthContext);
-  // const numQuestions = Math.floor(Math.random() * (15 - 8 + 1)) + 8
-  const [numQuestions, setNumQuestions] = useState(Math.floor(Math.random() * (15 - 8 + 1)) + 8)
+  const numQuestions = Math.floor(Math.random() * (15 - 10 + 1)) + 10
   const { isPortrait } = useContext(PortraitContext)
   const [question, setQuestion] = useState()
   const [answer, setAnswer] = useState(null)
@@ -31,6 +30,7 @@ const InterviewRoom = () => {
   const [interviewResults, setInterviewResults] = useState()
   const [movedFromScreen, setMovedFromScreen] = useState(0)
   const [thinking, setThinking] = useState(true)
+
   const API_URL = import.meta.env.VITE_API_URL;
 
   const {
@@ -46,33 +46,65 @@ const InterviewRoom = () => {
 
   useEffect(() => {
     if (interviewData) {
-      setInterviewChat([
-        {
-          role: "user",
-          parts: [{
-            text: `
-                Your role is to act as an interviewer for the comapny ${interviewData.company}, conducting an interview for the position of ${interviewData.jobRole}. The job description or relevant skills are as follows: ${interviewData.jobDescription}. The candidate's has experience of ${interviewData.experience} and the resume overview is: ${interviewData.resume}.
+      if (interviewData.selectedType === 'technical') {
+        setInterviewChat([
+          {
+            role: "user",
+            parts: [{
+              text: `
+                  Your role is to act as an interviewer for the company ${interviewData.company}, conducting an interview for the position of ${interviewData.jobRole}. The job description or relevant skills are as follows: ${interviewData.jobDescription}. The candidate's has experience of ${interviewData.experience} and the resume overview is: ${interviewData.resume}.
 
-                Your task is to ask ${numQuestions} interview questions, one at a time. These questions should be based on:
-                The job role and its responsibilities OR,
-                Relevent skills based technical core questions OR,
-                The candidate's resume details, such as skills, projects, and experience OR,
-                The Responses given by the candidate to previous questions OR, HR and Managerial round based questions
-                
-                Instructions:
+                  Your task is to ask ${numQuestions} technical interview questions, one at a time. These questions should be based on:
+                  - The job role and its technical responsibilities,
+                  - Core technical skills related to the role, such as programming, system architecture, or problem-solving,
+                  - The candidate's resume, including their projects and technical skills, 
+                  - The candidate's responses to previous technical questions.
 
-                Start the Interview: You may begin by asking the candidate to introduce themselves.
-                Question Format: Ask one question at a time, keeping each question straightforward and relevant. Ensure that questions are concise, to the point, and cover a range of topics including technical skills, problem-solving, and behavioral aspects and others.
-                If the candidate asks for clarification on a question, simplify the question without changing its core intent.
-                Feedback: Do not provide immediate feedback on the candidate’s answers. Maintain a realistic interview environment by waiting until the end of the interview to provide a detailed analysis.
-                Randomization: Ensure that questions are asked in a random order to simulate a real interview experience. Since answer is provided by microphone regognition, there may be some mistacke in capturing, so try to understand the context of the candidate's answer and consider it as an answer.
-                Generate your responses in one or two lines of plain text format. After the interview is complete, a detailed analysis of the interview will be requested.
-                `
+                  Instructions:
+                  - Start the Interview: Ask the candidate to introduce themselves, focusing on their technical background.
+                  - Question Format: Ask one question at a time, ensuring that each is concise, clear, and focused on the technical aspects of the role.
+                  - Clarification: If the candidate asks for clarification, simplify the question but retain its technical focus.
+                  - Feedback: Do not provide feedback immediately after answers. Save feedback for the end of the interview.
+                  - Randomization: Ask questions in a random order to replicate a real interview.
+                  - Be aware of possible transcription errors from microphone recognition, and interpret the candidate’s responses accordingly.
+                  Generate your response only in one or two lines of plain text.
+                  Once the interview is complete, a detailed technical analysis of the interview will be requested.
+                  `
+            }
+            ]
           }
-          ]
-        }
-      ]);
+        ]);
+      }
+      else {
+        setInterviewChat([
+          {
+            role: "user",
+            parts: [{
+              text: `
+                  Your role is to act as an HR interviewer for the company ${interviewData.company}, conducting an interview for the position of ${interviewData.jobRole}. The job description or relevant skills are as follows: ${interviewData.jobDescription}. The candidate has experience of ${interviewData.experience} and the resume overview is: ${interviewData.resume}.
 
+                  Your task is to ask ${numQuestions} HR or behavioral interview questions, one at a time. These questions should focus on:
+                  - Behavioral aspects and how the candidate handles situations at work,
+                  - Cultural fit, teamwork, and communication skills,
+                  - Their prior experiences and how they relate to the responsibilities of the current role,
+                  - Responses given to previous questions or scenario-based questions for problem-solving and leadership.
+
+                  Instructions:
+                  - Start the Interview: Ask the candidate to introduce themselves, focusing on their professional journey and career highlights.
+                  - Question Format: Ask questions one at a time, ensuring they are concise and focused on interpersonal skills, leadership, or other HR-related areas.
+                  - Clarification: Simplify any questions upon request while maintaining their behavioral intent.
+                  - Feedback: Wait until the end of the interview to provide feedback.
+                  - Randomization: Ensure that questions cover a variety of HR aspects and are asked in random order.
+                  - Be mindful of transcription errors due to microphone recognition, and interpret the candidate's response in context.
+                  Generate your response only in one or two lines of plain text.
+                  After the interview, a detailed analysis of the candidate's HR-related performance will be requested.
+
+                  `
+              }
+            ]
+          }
+        ]);
+      }
     }
     else navigate('/home/interview-details')
   }, [interviewData]);
@@ -123,10 +155,17 @@ const InterviewRoom = () => {
     }
   }, [question, mute]);
 
+  useEffect(() => {
+    if(listening){
+      SpeechRecognition.stopListening()
+    }
+  },[])
+
 
   const prompt = `Now the interview is completed, and you have access to all the questions and answers. Since using webspeechapi so the answers are not captured porperly, so try to understand the context and then evaluate. Candidate switched tabs ${movedFromScreen} times, consider it as malpractice if moved away from screen more than once.  Based on this information, please provide a detailed performance evaluation in a structured JSON format. Your response should be in this format:
   {
     "jobRole": job Role for which interview was conducted.
+    "interviewType": "Technical or HR"
     "overallPerformance: Describe overall performance of the candidate in one line. , 
     overallScore: A numerical value representing the candidate's overall performance during the interview, rated on a scale of 1 to 10,
     sectionScore: {
