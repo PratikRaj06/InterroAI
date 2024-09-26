@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react'
 import Tooltip from '@mui/material/Tooltip';
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { AuthContext } from '../contexts/auth';
-import logoName from '../assets/images/logoName.webp'
 import { PortraitContext } from '../contexts/portrait';
+import Header from '../components/Header';
 
 const Meter = ({ value, colour, fontSize, size }) => {
     return (
@@ -28,7 +28,7 @@ const Meter = ({ value, colour, fontSize, size }) => {
 }
 
 const InterviewHistory = () => {
-    const navigate = useNavigate()
+
     const { isPortrait } = useContext(PortraitContext)
     const { accessToken, loading } = useContext(AuthContext)
     const [result, setResult] = useState(null)
@@ -51,13 +51,13 @@ const InterviewHistory = () => {
             });
 
             if (response.status !== 200) {
-                alert("An error");
+                window.alert("An error");
                 return;
             }
             const responseData = await response.json();
             setResult(responseData.data);
         } catch (error) {
-            alert(`Error: ${error.message}`);
+            window.alert(`Error: ${error.message}`);
         }
     };
 
@@ -71,27 +71,28 @@ const InterviewHistory = () => {
 
         <div className='w-screen flex flex-col items-center'>
             <div className='w-full py-1 lg:px-10 px-5 bg-gradient-to-r from-blue-medium to-pink flex items-center justify-start'>
-            <Link to={'/home/profile'} className='px-5 py-1 text-lg flex items-center justify-center gap-3 text-white font-black rounded-lg'>
-            <Tooltip title='Back to Profile'>
-                <ArrowBackIosIcon/>
-            </Tooltip>
-            </Link>
-                <img onClick={() => navigate('/home')} draggable={false} src={logoName} className='lg:h-6 h-4 my-2 cursor-pointer' alt="" />
-                
+                <Link to={'/home/profile'} className='px-5 py-1 text-lg flex items-center justify-center gap-3 text-white font-black rounded-lg'>
+                    <Tooltip title='Back to Profile'>
+                        <ArrowBackIosIcon />
+                    </Tooltip>
+                </Link>
+                <Header/>
+
             </div>
-            
+
             {result && <div className='w-full lg:p-10 p-5 flex flex-col items-center'>
 
                 <h1 className='lg:text-4xl text-3xl text-center font-bold text-purple pb-10'>Interview Result Analysis</h1>
 
                 <div className='w-11/12'>
-                    <h1 className='w-full lg:text-2xl text-xl font-bold text-blue-dark py-5'>Job Role: <span className='font-medium'>{result.jobRole}</span></h1>
+                    <h1 className='w-full lg:text-2xl text-xl font-bold text-blue-dark py-3'>Job Role: <span className='font-medium'>{result.jobRole}</span></h1>
+                    <h1 className='w-full lg:text-2xl text-xl font-bold text-blue-dark pb-5'>Interview Type: <span className='font-medium'>{result.interviewType? result.interviewType : 'HR'}</span></h1>
                 </div>
 
 
                 <div className='w-full grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 bg-pink-light p-5 rounded-lg shadow-lg'>
 
-                    <div className={`w-full flex ${isPortrait? 'lg:flex-row md:flex-row flex-col col-span-2': 'flex-col col-span-1'} items-center justify-center gap-5`}>
+                    <div className={`w-full flex ${isPortrait ? 'lg:flex-row md:flex-row flex-col col-span-2' : 'flex-col col-span-1'} items-center justify-center gap-5`}>
                         <div className='w-full bg-white rounded-lg flex flex-col items-center p-5'>
                             <Meter size={200} fontSize={50} value={result.sectionScore.skill} colour={getColourCodes(result.sectionScore.skill)} />
                             <p className='font-medium text-xl pt-5'>Skills</p>
@@ -104,7 +105,7 @@ const InterviewHistory = () => {
 
                     </div>
 
-                    <div className={`col-span-2 w-full h-full ${isPortrait? 'py-5': 'px-5'}`}>
+                    <div className={`col-span-2 w-full h-full ${isPortrait ? 'py-5' : 'px-5'}`}>
                         <div className='w-full h-full bg-white rounded-lg flex flex-col items-center justify-between p-5'>
                             <p className='font-bold text-2xl'>Overall Performance</p>
                             <Meter size={300} fontSize={100} value={result.overallScore} colour={getColourCodes(result.overallScore)} />
@@ -113,7 +114,7 @@ const InterviewHistory = () => {
                         </div>
                     </div>
 
-                    <div className={`w-full flex ${isPortrait? 'lg:flex-row md:flex-row flex-col col-span-2': 'flex-col col-span-1'} items-center justify-center gap-5`}>
+                    <div className={`w-full flex ${isPortrait ? 'lg:flex-row md:flex-row flex-col col-span-2' : 'flex-col col-span-1'} items-center justify-center gap-5`}>
                         <div className='w-full bg-white rounded-lg flex flex-col items-center p-5'>
                             <Meter size={200} fontSize={50} value={result.sectionScore.communication} colour={getColourCodes(result.sectionScore.communication)} />
                             <p className='font-medium text-xl pt-5'>Communication</p>
