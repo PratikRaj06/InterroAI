@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import logoName from '../assets/images/logoName.webp'
 import interview from '../assets/images/interview.webp'
 import resume from '../assets/images/resume.webp'
@@ -13,10 +13,9 @@ const DashBoard = () => {
   const navigate = useNavigate();
   const { isPortrait } = useContext(PortraitContext)
   const { isAuthenticated, data, loading } = useContext(AuthContext);
-  const [name, setName] = useState('')
+  
   useEffect(() => {
     if (loading) return;
-    if( data ) setName(data.displayName) 
     if (!isAuthenticated && !loading) navigate('/sign-in')
   }, [isAuthenticated, loading, data, navigate])
 
@@ -26,7 +25,6 @@ const DashBoard = () => {
         <div className='py-1 lg:px-10 px-5 bg-gradient-to-r from-blue-medium to-pink flex items-center justify-between'>
           <img draggable={false} src={logoName} className='lg:h-6 h-4 my-2' alt="" />
             <Link to={'/home/profile'} className='text-white lg:text-4xl text-3xl flex items-center justify-center gap-2'>
-            <h1 className='lg:text-2xl text-lg text-white font-bold'>{name}</h1>
             <Tooltip title='Profile'><PersonIcon fontSize='inherit' /></Tooltip>  
             </Link>
         </div>
