@@ -48,8 +48,9 @@ const InterviewResult = () => {
 
                 <h1 className='lg:text-4xl text-3xl text-center font-bold text-purple pb-10'>Interview Result Analysis</h1>
 
-                <div className='w-11/12'>
-                    <h1 className='w-full lg:text-2xl text-xl font-bold text-blue-dark py-5'>Job Role: <span className='font-medium'>{result.jobRole}</span></h1>
+                <div className='w-11/12 flex flex-col gap-3'>
+                    <h1 className='w-full lg:text-2xl text-xl font-bold text-blue-dark py-3'>Job Role: <span className='font-medium'>{result.jobRole}</span></h1>
+                    <h1 className='w-full lg:text-2xl text-xl font-bold text-blue-dark pb-5'>Interview Type: <span className='font-medium'>{result.interviewType}</span></h1>    
                 </div>
                 
 
