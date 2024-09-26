@@ -38,7 +38,6 @@ const SignUp = () => {
         setEmailError("");
         setPasswordError("");
         setMailSent(false);
-        setProcessing(true)
 
         try {
             if (!email) {
@@ -55,6 +54,8 @@ const SignUp = () => {
                 setPasswordError("Passwords do not match");
                 return;
             }
+
+            setProcessing(true)
 
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
