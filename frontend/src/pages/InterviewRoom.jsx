@@ -164,8 +164,8 @@ const InterviewRoom = () => {
 
   const prompt = `Now the interview is completed, and you have access to all the questions and answers. Since using webspeechapi so the answers are not captured porperly, so try to understand the context and then evaluate. Candidate switched tabs ${movedFromScreen} times, consider it as malpractice if moved away from screen more than once.  Based on this information, please provide a detailed performance evaluation in a structured JSON format. Your response should be in this format:
   {
-    "jobRole": job Role for which interview was conducted.
-    "interviewType": "Technical or HR"
+    "jobRole": job Role for which interview was conducted.,
+    "interviewType": "Technical or HR",
     "overallPerformance: Describe overall performance of the candidate in one line. , 
     overallScore: A numerical value representing the candidate's overall performance during the interview, rated on a scale of 1 to 10,
     sectionScore: {
@@ -291,6 +291,7 @@ const InterviewRoom = () => {
         return;
       }
       setTimeout(() => {
+        console.log(resumeData);
         navigate('/home/interview-results', { state: { data: resumeData } })
       }, 3000);
 
