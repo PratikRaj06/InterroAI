@@ -43,7 +43,7 @@ const InterviewHistory = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch(`${API_URL}/interview-data/get-document/${id}`, { // Using userId in URL
+            const response = await fetch(`${API_URL}/interview-data/get-document/${id}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
@@ -70,8 +70,8 @@ const InterviewHistory = () => {
     return (
 
         <div className='w-screen flex flex-col items-center'>
-            <div className='w-full py-1 lg:px-10 px-5 bg-gradient-to-r from-blue-medium to-pink flex items-center justify-start'>
-                <Link to={'/home/profile'} className='px-5 py-1 text-lg flex items-center justify-center gap-3 text-white font-black rounded-lg'>
+            <div className='w-full py-1 px-5 bg-gradient-to-r from-blue-medium to-pink flex items-center justify-start'>
+                <Link to={'/home/profile'} className='pl-2 py-1 text-lg flex items-center justify-center text-white font-black rounded-lg'>
                     <Tooltip title='Back to Profile'>
                         <ArrowBackIosIcon />
                     </Tooltip>
@@ -82,15 +82,15 @@ const InterviewHistory = () => {
 
             {result && <div className='w-full lg:p-10 p-5 flex flex-col items-center'>
 
-                <h1 className='lg:text-4xl text-3xl text-center font-bold text-purple pb-10'>Interview Result Analysis</h1>
+                <h1 className='lg:text-4xl md:text-3xl text-2xl text-center font-bold text-blue-medium pb-10'>Interview Result Analysis</h1>
 
-                <div className='w-11/12'>
-                    <h1 className='w-full lg:text-2xl text-xl font-bold text-blue-dark py-3'>Job Role: <span className='font-medium'>{result.jobRole}</span></h1>
-                    <h1 className='w-full lg:text-2xl text-xl font-bold text-blue-dark pb-5'>Interview Type: <span className='font-medium'>{result.interviewType? result.interviewType : 'HR'}</span></h1>
+                <div className={`w-full bg-blue-light rounded-lg lg:px-10 px-5 flex ${isPortrait? 'flex-col': 'flex-row justify-between'} items-center my-5`}>
+                    <h1 className='lg:text-2xl text-xl font-bold text-blue-dark py-3'>Job Role: <span className='font-medium'>{result.jobRole}</span></h1>
+                    <h1 className='lg:text-2xl text-xl font-bold text-blue-dark py-3'>Interview Type: <span className='font-medium'>{result.interviewType? result.interviewType : 'HR'}</span></h1>
                 </div>
 
 
-                <div className='w-full grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 bg-pink-light p-5 rounded-lg shadow-lg'>
+                <div className='w-full grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 bg-blue-light p-5 rounded-lg shadow-lg'>
 
                     <div className={`w-full flex ${isPortrait ? 'lg:flex-row md:flex-row flex-col col-span-2' : 'flex-col col-span-1'} items-center justify-center gap-5`}>
                         <div className='w-full bg-white rounded-lg flex flex-col items-center p-5'>
@@ -130,7 +130,7 @@ const InterviewHistory = () => {
 
                 <div className='w-11/12 flex flex-col items-center py-10'>
                     <div className='border-[1px] border-blue-dark w-full m-10 border-opacity-25'></div>
-                    <h1 className='w-full text-3xl font-bold text-pink'>Result Summary</h1>
+                    <h1 className='w-full text-3xl font-bold text-blue-medium'>Result Summary</h1>
 
                     {result.strengths.length > 0 && <div className='w-full lg:p-5 py-5 text-blue-dark'>
                         <h2 className='font-semibold text-2xl'>⮞ Strengths</h2>
@@ -161,11 +161,11 @@ const InterviewHistory = () => {
 
                     <div className='border-[1px] border-blue-dark w-full m-10 border-opacity-25'></div>
 
-                    <h1 className='w-full text-3xl font-bold text-pink'>Question Answers</h1>
+                    <h1 className='w-full text-3xl font-bold text-blue-medium'>Question Answers</h1>
 
                     <div className='w-full lg:p-5 py-5 text-blue-dark'>
                         {result['q&a'].map((item, index) => (
-                            <div key={index} className='shadow-lg border-[2px] border-pink border-opacity-25 p-5 rounded-lg my-5'>
+                            <div key={index} className='shadow-lg border-[2px] border-blue-regular border-opacity-25 p-5 rounded-lg my-5'>
                                 <p className='text-lg py-2'>
                                     <b>Question: </b>
                                     {item.question}
