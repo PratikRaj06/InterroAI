@@ -16,8 +16,7 @@ const InterviewRoom = () => {
 
   const { interviewData } = useContext(InterviewDataContext);
   const { accessToken } = useContext(AuthContext);
-  // const numQuestions = Math.floor(Math.random() * (15 - 10 + 1)) + 10
-  const numQuestions = 2;
+  const numQuestions = Math.floor(Math.random() * (15 - 10 + 1)) + 10
   const { isPortrait } = useContext(PortraitContext)
   const [question, setQuestion] = useState()
   const [answer, setAnswer] = useState(null)
@@ -191,7 +190,7 @@ const InterviewRoom = () => {
 
   const startListening = () => {
     resetTranscript()
-    SpeechRecognition.startListening({ continuous: true, language: 'en-IN' })
+    SpeechRecognition.startListening({ continuous: true })
   };
 
   const stopListening = () => {
