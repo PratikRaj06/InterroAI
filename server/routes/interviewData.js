@@ -52,6 +52,7 @@ router.get('/get-data', async (req, res) => {
         if (!decodedToken) return res.status(401).json({ message: "No Token" })
         const snapshot = await db.collection('interviewHistory')
             .where('email', '==', decodedToken.email)
+            .orderBy('createdAt', 'desc')
             .select('jobRole', 'score', 'createdAt')
             .get();
         if (snapshot.empty) {
